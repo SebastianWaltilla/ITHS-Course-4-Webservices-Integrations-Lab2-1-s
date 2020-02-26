@@ -1,11 +1,12 @@
 package se.iths.TwoToeSebastian.myservice;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 
 @RequestMapping("/api/v1/userdata")
@@ -35,6 +36,12 @@ public class UsersController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
+    @PostMapping
+    public ResponseEntity<UserData> createPerson(@RequestBody UserData user) {
+        var p = repository.save(user);          // Sparar in användare från request body in i lista i databas
+        HttpHeaders headers = new HttpHeaders();        // skapar en header
+        headers.setLocation(linkTo(UsersController.class).slash(p.getId()).toUri());    // autogenera ny user id,  //headers.add("Location", "/api/persons/" + p.getId());
+        return new ResponseEntity<>(p, headers, HttpStatus.CREATED); // p body(user data in), headers vilka headers som skickas tillbaka, httpstatus.created (201 ok kod).
+    }
 
 }

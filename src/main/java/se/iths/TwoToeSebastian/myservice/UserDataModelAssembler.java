@@ -4,13 +4,14 @@ import org.apache.catalina.User;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
+@Component
 public class UserDataModelAssembler implements RepresentationModelAssembler<UserData, EntityModel<UserData>> {
 
     //http://stateless.co/hal_specification.html
