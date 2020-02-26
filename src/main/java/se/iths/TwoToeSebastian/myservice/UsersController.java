@@ -27,6 +27,13 @@ public class UsersController {
         return assembler.toCollectionModel(repository.findAll());
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<EntityModel<UserData>> one(@PathVariable Integer id) {
+        return repository.findById(id)
+                .map(assembler::toModel)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
 
 
