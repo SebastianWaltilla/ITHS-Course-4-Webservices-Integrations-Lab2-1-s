@@ -9,4 +9,11 @@ public class MyserviceApplication {
 		SpringApplication.run(MyserviceApplication.class, args);
 	}
 
+
+	// post
+	// put
+	// get
+	// patch
+	// delete
+
 }
