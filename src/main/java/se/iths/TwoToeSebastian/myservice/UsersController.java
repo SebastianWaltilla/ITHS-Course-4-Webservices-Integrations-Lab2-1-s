@@ -56,17 +56,26 @@ public class UsersController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<UserData> replacePerson(@RequestBody UserData userIn, @PathVariable Integer id) {
-        return repository.findById(id)
-                .map(existingUser -> {
-                    if(!userIn.getUserName().equals(null))
-                    existingUser.setUserName(userIn.getUserName());  // Behöver vi en sån här rad, för varje fält
-                                                                // med check att det inte är null som ersätter
-                                                                // det tidigare värder om null
-                    repository.save(existingUser);
-                })
-                .orElseGet(() ->
-                        new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    ResponseEntity<EntityModel<UserData>> replacePerson(@RequestBody UserData userIn, @PathVariable Integer id) {
+
+        if(id == userIn.id){
+            var p = repository.findById(id)
+                    .map(existingUser -> {
+                            existingUser.setUserName(userIn.getUserName());
+                            existingUser.setRealName(userIn.getRealName());
+                            existingUser.setCity((userIn.getCity()));
+                            existingUser.setIncome(userIn.getIncome());
+                            existingUser.setInRelationship(userIn.inRelationship);
+                        repository.save(existingUser);
+                        return existingUser;})
+                    .get();
+
+            var entityModel = assembler.toModel(p);
+            return new ResponseEntity<>(entityModel, HttpStatus.CREATED);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
 
