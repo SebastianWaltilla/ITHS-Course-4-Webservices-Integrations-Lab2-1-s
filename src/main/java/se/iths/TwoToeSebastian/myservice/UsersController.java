@@ -55,33 +55,48 @@ public class UsersController {
      */
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}") // uppdate  if pressent
     ResponseEntity<EntityModel<UserData>> replacePerson(@RequestBody UserData userIn, @PathVariable Integer id) {
 
-        if(id == userIn.id){
+        if(repository.findById(id).isPresent()){
+            log.info("IF");
             var p = repository.findById(id)
                     .map(existingUser -> {
-                            existingUser.setUserName(userIn.getUserName());
-                            existingUser.setRealName(userIn.getRealName());
-                            existingUser.setCity((userIn.getCity()));
-                            existingUser.setIncome(userIn.getIncome());
-                            existingUser.setInRelationship(userIn.inRelationship);
+                        existingUser.setUserName(userIn.getUserName());
+                        existingUser.setRealName(userIn.getRealName());
+                        existingUser.setCity((userIn.getCity()));
+                        existingUser.setIncome(userIn.getIncome());
+                        existingUser.setInRelationship(userIn.inRelationship);
                         repository.save(existingUser);
                         return existingUser;})
                     .get();
-
             var entityModel = assembler.toModel(p);
-            return new ResponseEntity<>(entityModel, HttpStatus.CREATED);
+            return new ResponseEntity<>(entityModel, HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            log.info("ELSE!");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
 
+    @PatchMapping("/{id}")
+    ResponseEntity<EntityModel<UserData>> modifyPerson(@RequestBody UserData user, @PathVariable Long id) {
 
 
+        return repository.findById(id)
+                .map(person -> {
+                    if (user.getName() != null)
+                        person.setName(user.getName());
 
+                    repository.save(person);
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setLocation(linkTo(PersonsController.class).slash(person.getId()).toUri());
+                    return new ResponseEntity<>(person, headers, HttpStatus.OK);
+                })
+                .orElseGet(() ->
+                        new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 
 
 
