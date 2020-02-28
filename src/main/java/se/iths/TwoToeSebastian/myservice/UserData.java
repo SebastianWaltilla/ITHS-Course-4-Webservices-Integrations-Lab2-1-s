@@ -11,10 +11,19 @@ import javax.persistence.GeneratedValue;
 public class UserData {
 
     @Id
-    @GeneratedValue int id;       // autogenerate +=1 for each new User
+    @GeneratedValue Integer id;       // autogenerate +=1 for each new User
     String userName;
     String realName;
     String city;
     float income;
     boolean inReationship;
+
+    public User(Integer id, String userName, String realName, String city, float income, boolean inRelationship) {
+        this.id = id;
+        this.userName = userName;
+        this.realName = realName;
+        this.city = city;
+        this.income = income;
+        this.inReationship = inRelationship;
+    }
 }
