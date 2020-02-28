@@ -40,12 +40,23 @@ public class UsersController {
     }
 
     @PostMapping
-    public ResponseEntity<UserData> createPerson(@RequestBody UserData user) {
+    public ResponseEntity<EntityModel<UserData>> createPerson(@RequestBody UserData user) {
+        log.info("Created " + user);
         var p = repository.save(user);          // Sparar in användare från request body in i lista i databas
+        log.info("Saved to repository " + p);
+        var entityModel = assembler.toModel(p);
+        return new ResponseEntity<>(entityModel, HttpStatus.CREATED);
+
+
+
+      /*
         HttpHeaders headers = new HttpHeaders();        // skapar en header
         headers.setLocation(linkTo(UsersController.class).slash(p.getId()).toUri());    // autogenera ny user id,  //headers.add("Location", "/api/persons/" + p.getId());
         return new ResponseEntity<>(p, headers, HttpStatus.CREATED); // p body(user data in), headers vilka headers som skickas tillbaka, httpstatus.created (201 ok kod).
+     */
+
     }
+
 
 
 

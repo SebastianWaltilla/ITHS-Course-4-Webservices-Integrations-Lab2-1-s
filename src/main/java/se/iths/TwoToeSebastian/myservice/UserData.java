@@ -10,20 +10,19 @@ import javax.persistence.GeneratedValue;
 @NoArgsConstructor         // Automatic generation of constructor
 public class UserData {
 
-    @Id
-    @GeneratedValue Integer id;       // autogenerate +=1 for each new User
+    @Id @GeneratedValue Integer id;       // autogenerate +=1 for each new User
     String userName;
     String realName;
     String city;
     float income;
-    boolean inReationship;
+    boolean inRelationship;
 
-    public User(Integer id, String userName, String realName, String city, float income, boolean inRelationship) {
+    public UserData(Integer id, String userName, String realName, String city, float income, boolean inRelationship) {
         this.id = id;
         this.userName = userName;
         this.realName = realName;
         this.city = city;
         this.income = income;
-        this.inReationship = inRelationship;
+        this.inRelationship = inRelationship;
     }
 }
