@@ -25,4 +25,6 @@ public class UserData {
         this.income = income;
         this.inRelationship = inRelationship;
     }
+
 }
+

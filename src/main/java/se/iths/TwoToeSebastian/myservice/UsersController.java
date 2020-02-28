@@ -6,18 +6,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
-
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @Slf4j
-@RequestMapping("/api/v1/userdata")
+@RequestMapping("/api/v1/usersData")   // link from insomnia after 8080/
 @RestController
 public class UsersController {
 
     final UserDataRepository repository;
     private final UserDataModelAssembler assembler;
-
 
     public UsersController(UserDataRepository in, UserDataModelAssembler in2) {
         this.repository = in;
@@ -42,20 +39,37 @@ public class UsersController {
     @PostMapping
     public ResponseEntity<EntityModel<UserData>> createPerson(@RequestBody UserData user) {
         log.info("Created " + user);
+
+        if(repository.findById(user.getId()).isPresent()) {  // if id exist, check for not overwrite
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
         var p = repository.save(user);          // Sparar in användare från request body in i lista i databas
         log.info("Saved to repository " + p);
         var entityModel = assembler.toModel(p);
         return new ResponseEntity<>(entityModel, HttpStatus.CREATED);
-
-
-
       /*
         HttpHeaders headers = new HttpHeaders();        // skapar en header
         headers.setLocation(linkTo(UsersController.class).slash(p.getId()).toUri());    // autogenera ny user id,  //headers.add("Location", "/api/persons/" + p.getId());
         return new ResponseEntity<>(p, headers, HttpStatus.CREATED); // p body(user data in), headers vilka headers som skickas tillbaka, httpstatus.created (201 ok kod).
      */
-
     }
+
+    @PutMapping("/{id}")
+    ResponseEntity<UserData> replacePerson(@RequestBody UserData userIn, @PathVariable Integer id) {
+        return repository.findById(id)
+                .map(existingUser -> {
+                    if(!userIn.getUserName().equals(null))
+                    existingUser.setUserName(userIn.getUserName());  // Behöver vi en sån här rad, för varje fält
+                                                                // med check att det inte är null som ersätter
+                                                                // det tidigare värder om null
+                    repository.save(existingUser);
+                })
+                .orElseGet(() ->
+                        new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+
 
 
 
