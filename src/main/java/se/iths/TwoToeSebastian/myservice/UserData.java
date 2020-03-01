@@ -33,12 +33,12 @@ public class UserData {
             return nej;
     }
 
-    public UserData setAllFields(UserData user, Object[] object){
-      user.setUserName(object[0].toString());
-      user.setRealName(object[1].toString());
-      user.setCity(object[2].toString());
-      user.setIncome(Integer.parseInt(object[3].toString()));
-      user.setInRelationship(Boolean.parseBoolean(object[4].toString()));
+    public UserData setAllFieldsFromObjectArray(UserData user, Object[] object){
+      user.setUserName(object[1].toString());
+      user.setRealName(object[2].toString());
+      user.setCity(object[3].toString());
+      user.setIncome(Float.parseFloat(object[3].toString()));
+      user.setInRelationship(Boolean.parseBoolean(object[5].toString()));
       return user;
     }
 }

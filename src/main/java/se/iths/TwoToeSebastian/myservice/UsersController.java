@@ -1,11 +1,14 @@
 package se.iths.TwoToeSebastian.myservice;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Map;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @Slf4j
@@ -75,34 +78,68 @@ public class UsersController {
     }
 
     @PatchMapping("/{id}")
+    ResponseEntity<EntityModel<UserData>> modifyUser(@RequestBody UserData updatedUser, @PathVariable Integer id){
+        if(repository.findById(id).isPresent()){
+            var p = repository.findById(id)
+                    .map(newUser -> {
+                        if(updatedUser.getUserName() != null)
+                            newUser.setUserName(updatedUser.getUserName());
+                        if(updatedUser.getRealName() != null)
+                            newUser.setRealName(updatedUser.getRealName());
+                        if(updatedUser.getCity() != null)
+                            newUser.setCity(updatedUser.getCity());
+//                    if(updatedUser.getIncome() != newUser.getIncome())
+//                        newUser.setIncome(updatedUser.getIncome());
+                        if(updatedUser.isInRelationship() != newUser.isInRelationship())
+                            newUser.setInRelationship(updatedUser.isInRelationship());
+                        repository.save(newUser);
+                        return newUser;}).get();
+            var entityModel = assembler.toModel(p);
+            log.info("IDnr: " + p.getId() + " modified!");
+            return new ResponseEntity<>(entityModel, HttpStatus.OK);
+        }
+        else {
+            log.info("Wrong ID");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+/*
+
+    @PatchMapping("/{id}")
     ResponseEntity<EntityModel<UserData>> modifyPerson(@RequestBody UserData user, @PathVariable Integer id) {
        if(repository.findById(id).isPresent()) {
-           var p = fillUserWithNotNullFields(user, repository.findById(id).get());
+
+           var p = fillUserWithFieldsNotNull(user, repository.findById(id).get());
+           repository.save(p);
+
            var entityModel = assembler.toModel(p);
            return new ResponseEntity<>(entityModel, HttpStatus.OK);
+
        } else {
           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
        }
     }
 
-    private UserData fillUserWithNotNullFields(UserData fromRequestBody, UserData fromRepository){
+    private UserData fillUserWithFieldsNotNull(UserData fromRequestBody, UserData fromRepository){
         Object[] repositoryAllFields = fromRepository.getAllFields();
-        Object[] bodyAllFields  = fromRequestBody.getAllFields();
+        Object[] bodyAllFields = fromRequestBody.getAllFields();
          for (int i = 0; i < 5; i++){
-            if(bodyAllFields[i].equals(null)){
-                repositoryAllFields [i] = bodyAllFields[i];
+            if(bodyAllFields[i] != null){
+                repositoryAllFields[i] = bodyAllFields[i];
             }
          }
-        return fromRepository.setAllFields(fromRepository, bodyAllFields);
+        return fromRepository.setAllFieldsFromObjectArray(fromRepository, repositoryAllFields);
     }
 
+    @DeleteMapping("/{id}")
+    ResponseEntity<EntityModel<UserData>> deletePerson(@PathVariable Integer id) {
+        if (repository.existsById(id)) {
+            log.info("User deleted with id " + id);
+            repository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
-
-
-
-
-
-
-
-
+ */
 }
