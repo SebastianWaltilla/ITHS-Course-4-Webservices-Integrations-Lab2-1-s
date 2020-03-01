@@ -48,11 +48,6 @@ public class UsersController {
         log.info("Saved to repository " + p);
         var entityModel = assembler.toModel(p);
         return new ResponseEntity<>(entityModel, HttpStatus.CREATED);
-      /*
-        HttpHeaders headers = new HttpHeaders();        // skapar en header
-        headers.setLocation(linkTo(UsersController.class).slash(p.getId()).toUri());    // autogenera ny user id,  //headers.add("Location", "/api/persons/" + p.getId());
-        return new ResponseEntity<>(p, headers, HttpStatus.CREATED); // p body(user data in), headers vilka headers som skickas tillbaka, httpstatus.created (201 ok kod).
-     */
     }
 
     @PutMapping("/{id}") // uppdate  if pressent
@@ -79,24 +74,33 @@ public class UsersController {
         }
     }
 
-
     @PatchMapping("/{id}")
-    ResponseEntity<EntityModel<UserData>> modifyPerson(@RequestBody UserData user, @PathVariable Long id) {
-
-
-        return repository.findById(id)
-                .map(person -> {
-                    if (user.getName() != null)
-                        person.setName(user.getName());
-
-                    repository.save(person);
-                    HttpHeaders headers = new HttpHeaders();
-                    headers.setLocation(linkTo(PersonsController.class).slash(person.getId()).toUri());
-                    return new ResponseEntity<>(person, headers, HttpStatus.OK);
-                })
-                .orElseGet(() ->
-                        new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    ResponseEntity<EntityModel<UserData>> modifyPerson(@RequestBody UserData user, @PathVariable Integer id) {
+       if(repository.findById(id).isPresent()) {
+           var p = fillUserWithNotNullFields(user, repository.findById(id).get());
+           var entityModel = assembler.toModel(p);
+           return new ResponseEntity<>(entityModel, HttpStatus.OK);
+       } else {
+          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+       }
     }
+
+    private UserData fillUserWithNotNullFields(UserData fromRequestBody, UserData fromRepository){
+        Object[] repositoryAllFields = fromRepository.getAllFields();
+        Object[] bodyAllFields  = fromRequestBody.getAllFields();
+         for (int i = 0; i < 5; i++){
+            if(bodyAllFields[i].equals(null)){
+                repositoryAllFields [i] = bodyAllFields[i];
+            }
+         }
+        return fromRepository.setAllFields(fromRepository, bodyAllFields);
+    }
+
+
+
+
+
+
 
 
 

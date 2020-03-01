@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Id;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data                      // Data for lombok, automatic getters and setters
@@ -27,10 +28,18 @@ public class UserData {
         this.inRelationship = inRelationship;
     }
 
+    public Object[] getAllFields(){
+          Object[] nej  = {userName, realName, city, income, inRelationship};
+            return nej;
+    }
 
-    public List<Object> allFält(){
-        fyller listan med alla fält.
-                retur lista
+    public UserData setAllFields(UserData user, Object[] object){
+      user.setUserName(object[0].toString());
+      user.setRealName(object[1].toString());
+      user.setCity(object[2].toString());
+      user.setIncome(Integer.parseInt(object[3].toString()));
+      user.setInRelationship(Boolean.parseBoolean(object[4].toString()));
+      return user;
     }
 }
 
