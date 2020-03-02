@@ -103,6 +103,17 @@ public class UsersController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<EntityModel<UserData>> deletePerson(@PathVariable Integer id) {
+        if (repository.existsById(id)) {
+            log.info("User deleted with id " + id);
+            repository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
 /*
 
     @PatchMapping("/{id}")
@@ -131,15 +142,7 @@ public class UsersController {
         return fromRepository.setAllFieldsFromObjectArray(fromRepository, repositoryAllFields);
     }
 
-    @DeleteMapping("/{id}")
-    ResponseEntity<EntityModel<UserData>> deletePerson(@PathVariable Integer id) {
-        if (repository.existsById(id)) {
-            log.info("User deleted with id " + id);
-            repository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+
 
  */
 }

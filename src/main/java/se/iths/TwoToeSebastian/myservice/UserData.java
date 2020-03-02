@@ -27,7 +27,7 @@ public class UserData {
         this.income = income;
         this.inRelationship = inRelationship;
     }
-
+/*
     public Object[] getAllFields(){
           Object[] nej  = {userName, realName, city, income, inRelationship};
             return nej;
@@ -41,6 +41,8 @@ public class UserData {
       user.setInRelationship(Boolean.parseBoolean(object[5].toString()));
       return user;
     }
+
+ */
 }
 
 
