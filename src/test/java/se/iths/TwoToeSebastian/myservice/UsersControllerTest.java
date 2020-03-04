@@ -41,7 +41,13 @@ class UsersControllerTest {
     }
 
 
-
+    @Test
+    @DisplayName("Calls DELETE method with url /api/v1/usersData/1")
+    void deleteOnePersonWithValidIdOne() throws Exception {
+        mockMvc.perform(
+                delete("/api/v1/usersData/1"))
+                .andExpect(status().isOk());
+    }
 
 
     @Test
@@ -81,7 +87,7 @@ class UsersControllerTest {
                 put("/api/v1/usersData/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"id\":0,\"userName\":\"Efter put\",\"realName\":\"Anton Johansson Plopp\",\"city\":\"goteborg\",\"income\":10000,\"inRelationship\":true}"))
-                .andExpect(status().isOk());
+                        .andExpect(status().isOk());
     }
 
 
