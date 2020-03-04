@@ -8,11 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.Optional;
 import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.Mockito.any;
@@ -43,7 +44,6 @@ class UsersControllerTest {
 
 
 
-
     @Test
     @DisplayName("Calls GET method with url /api/v1/usersData/1")
     void getOnePersonWithValidIdOne() throws Exception {
@@ -63,4 +63,29 @@ class UsersControllerTest {
                 .andExpect(jsonPath("_embedded.userDataList[0].userName", is("Anton")));
         //Build json paths with: https://jsonpath.com/
     }
+
+
+    @Test
+    void addNewPersonWithPostReturnsCreatedPerson() throws Exception {
+        mockMvc.perform(
+                post("/api/v1/usersData")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"id\":0,\"userName\":\"Innan JONANNA\",\"realName\":\"Johanna Svallingson\",\"city\":\"goteborg\",\"income\":10000,\"inRelationship\":true}"))
+                .andExpect(status().isCreated());
+    }
+
+
+    @Test
+    void addPutPersonWithPostReturnsCreatedPerson() throws Exception {
+        mockMvc.perform(
+                put("/api/v1/usersData/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"id\":0,\"userName\":\"Efter put\",\"realName\":\"Anton Johansson Plopp\",\"city\":\"goteborg\",\"income\":10000,\"inRelationship\":true}"))
+                .andExpect(status().isOk());
+    }
+
+
+
+
+
 }
