@@ -24,11 +24,6 @@ public class UsersController {
         this.assembler = in2;
     }
 
-    @GetMapping
-    public CollectionModel<EntityModel<UserData>> all() {
-        log.info("All persons called");
-        return assembler.toCollectionModel(repository.findAll());
-    }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<EntityModel<UserData>> one(@PathVariable Integer id) {
@@ -37,6 +32,12 @@ public class UsersController {
                 .map(assembler::toModel)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public CollectionModel<EntityModel<UserData>> all() {
+        log.info("All persons called");
+        return assembler.toCollectionModel(repository.findAll());
     }
 
     @PostMapping

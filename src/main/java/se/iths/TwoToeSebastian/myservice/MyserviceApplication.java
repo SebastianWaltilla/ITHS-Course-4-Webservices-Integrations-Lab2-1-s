@@ -10,10 +10,4 @@ public class MyserviceApplication {
 	}
 
 
-	// post
-	// put
-	// get
-	// patch
-	// delete
-
 }
