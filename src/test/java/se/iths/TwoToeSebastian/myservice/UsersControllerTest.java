@@ -42,13 +42,7 @@ class UsersControllerTest {
     }
 
 
-    @Test
-    @DisplayName("Calls DELETE method with url /api/v1/usersData/1")
-    void deleteOnePersonWithValidIdOne() throws Exception {
-        mockMvc.perform(
-                delete("/api/v1/usersData/1"))
-                .andExpect(status().isOk());
-    }
+
 
 
     @Test
@@ -92,6 +86,28 @@ class UsersControllerTest {
     }
 
 
+    @Test
+    @DisplayName("Patch with only username and expect other values to remain unchanged")
+    void patchUserWithNewUsername() throws Exception {
+        mockMvc.perform(patch("/api/v1/usersData/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"userName\":\"ThisIsNewUserSetInTest\"}")) // vad händer här?
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("_links.self.href", is("http://localhost/api/v1/usersData/1")))
+                .andExpect(jsonPath("userName", is("ThisIsNewUserSetInTest")))
+                .andExpect(jsonPath("realName", is("Anton Johansson")));
+    }
+
+
+
+
+    @Test
+    @DisplayName("Calls DELETE method with url /api/v1/usersData/1")
+    void deleteOnePersonWithValidIdOne() throws Exception {
+        mockMvc.perform(
+                delete("/api/v1/usersData/1"))
+                .andExpect(status().isOk());
+    }
 
 
 

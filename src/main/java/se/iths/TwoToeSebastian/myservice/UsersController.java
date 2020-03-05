@@ -89,8 +89,8 @@ public class UsersController {
                             newUser.setRealName(updatedUser.getRealName());
                         if(updatedUser.getCity() != null)
                             newUser.setCity(updatedUser.getCity());
-//                    if(updatedUser.getIncome() != newUser.getIncome())
-//                        newUser.setIncome(updatedUser.getIncome());
+                        if(updatedUser.getIncome() != newUser.getIncome())
+                            newUser.setIncome(updatedUser.getIncome());
                         if(updatedUser.isInRelationship() != newUser.isInRelationship())
                             newUser.setInRelationship(updatedUser.isInRelationship());
                         repository.save(newUser);
