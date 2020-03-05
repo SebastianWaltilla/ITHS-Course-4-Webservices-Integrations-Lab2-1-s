@@ -38,6 +38,7 @@ class UsersControllerTest {
             var u = (UserData) args[0];
             return new UserData(1, u.getUserName(),u.getRealName(),u.getCity(),u.getIncome(),u.isInRelationship());
         });
+        when(repository.existsById(1)).thenReturn(true);
     }
 
 
