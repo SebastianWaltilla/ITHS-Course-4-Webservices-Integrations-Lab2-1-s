@@ -1,5 +1,4 @@
 package se.iths.TwoToeSebastian.myservice;
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,15 +17,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.*;
+
 @WebMvcTest(UsersController.class)
 @Slf4j
 @Import({UserDataModelAssembler.class})
 class UsersControllerTest {
+
     @Autowired
     MockMvc mockMvc;
     @MockBean
     UserDataRepository repository;
+
+
     @BeforeEach
     void setup(){
         when(repository.findAll()).thenReturn(List.of(new UserData(1, "Anton", "Anton Johansson", "Mölndal", 10000, true),
@@ -41,10 +43,6 @@ class UsersControllerTest {
         when(repository.existsById(1)).thenReturn(true);
     }
 
-
-
-
-
     @Test
     @DisplayName("Calls GET method with url /api/v1/usersData/1")
     void getOnePersonWithValidIdOne() throws Exception {
@@ -54,7 +52,6 @@ class UsersControllerTest {
                 .andExpect(jsonPath("_links.self.href", is("http://localhost/api/v1/usersData/1")));
     }
 
-
     @Test
     void getAllReturnsListOfAllPersons() throws Exception {
         mockMvc.perform(
@@ -62,7 +59,6 @@ class UsersControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("_links.self.href", is("http://localhost/api/v1/usersData")))
                 .andExpect(jsonPath("_embedded.userDataList[0].userName", is("Anton")));
-        //Build json paths with: https://jsonpath.com/
     }
 
 
@@ -75,7 +71,6 @@ class UsersControllerTest {
                 .andExpect(status().isCreated());
     }
 
-
     @Test
     void addPutPersonWithPostReturnsCreatedPerson() throws Exception {
         mockMvc.perform(
@@ -84,7 +79,6 @@ class UsersControllerTest {
                         .content("{\"id\":0,\"userName\":\"Efter put\",\"realName\":\"Anton Johansson Plopp\",\"city\":\"goteborg\",\"income\":10000,\"inRelationship\":true}"))
                         .andExpect(status().isOk());
     }
-
 
     @Test
     @DisplayName("Patch with only username and expect other values to remain unchanged")
@@ -98,9 +92,6 @@ class UsersControllerTest {
                 .andExpect(jsonPath("realName", is("Anton Johansson")));
     }
 
-
-
-
     @Test
     @DisplayName("Calls DELETE method with url /api/v1/usersData/1")
     void deleteOnePersonWithValidIdOne() throws Exception {
@@ -108,7 +99,4 @@ class UsersControllerTest {
                 delete("/api/v1/usersData/1"))
                 .andExpect(status().isOk());
     }
-
-
-
 }

@@ -2,14 +2,9 @@ package se.iths.TwoToeSebastian.myservice;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Map;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @Slf4j
 @RequestMapping("/api/v1/usersData")   // link from insomnia after 8080/
@@ -23,7 +18,6 @@ public class UsersController {
         this.repository = in;
         this.assembler = in2;
     }
-
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<EntityModel<UserData>> one(@PathVariable Integer id) {
