@@ -27,22 +27,7 @@ public class UserData {
         this.income = income;
         this.inRelationship = inRelationship;
     }
-/*
-    public Object[] getAllFields(){
-          Object[] nej  = {userName, realName, city, income, inRelationship};
-            return nej;
-    }
 
-    public UserData setAllFieldsFromObjectArray(UserData user, Object[] object){
-      user.setUserName(object[1].toString());
-      user.setRealName(object[2].toString());
-      user.setCity(object[3].toString());
-      user.setIncome(Float.parseFloat(object[3].toString()));
-      user.setInRelationship(Boolean.parseBoolean(object[5].toString()));
-      return user;
-    }
-
- */
 }
 
 

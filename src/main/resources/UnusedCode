@@ -1,0 +1,55 @@
+Till controller, skall gå igenom detta nästa vecka.
+
+
+/*
+
+    @PatchMapping("/{id}")
+    ResponseEntity<EntityModel<UserData>> modifyPerson(@RequestBody UserData user, @PathVariable Integer id) {
+       if(repository.findById(id).isPresent()) {
+
+           var p = fillUserWithFieldsNotNull(user, repository.findById(id).get());
+           repository.save(p);
+
+           var entityModel = assembler.toModel(p);
+           return new ResponseEntity<>(entityModel, HttpStatus.OK);
+
+       } else {
+          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+       }
+    }
+
+    private UserData fillUserWithFieldsNotNull(UserData fromRequestBody, UserData fromRepository){
+        Object[] repositoryAllFields = fromRepository.getAllFields();
+        Object[] bodyAllFields = fromRequestBody.getAllFields();
+         for (int i = 0; i < 5; i++){
+            if(bodyAllFields[i] != null){
+                repositoryAllFields[i] = bodyAllFields[i];
+            }
+         }
+        return fromRepository.setAllFieldsFromObjectArray(fromRepository, repositoryAllFields);
+    }
+
+
+
+ */
+
+
+
+ Till UserData
+
+ /*
+     public Object[] getAllFields(){
+           Object[] nej  = {userName, realName, city, income, inRelationship};
+             return nej;
+     }
+
+     public UserData setAllFieldsFromObjectArray(UserData user, Object[] object){
+       user.setUserName(object[1].toString());
+       user.setRealName(object[2].toString());
+       user.setCity(object[3].toString());
+       user.setIncome(Float.parseFloat(object[3].toString()));
+       user.setInRelationship(Boolean.parseBoolean(object[5].toString()));
+       return user;
+     }
+
+  */

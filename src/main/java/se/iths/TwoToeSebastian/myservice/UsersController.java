@@ -38,17 +38,17 @@ public class UsersController {
     public ResponseEntity<EntityModel<UserData>> createPerson(@RequestBody UserData user) {
         log.info("Created " + user);
 
-        if(repository.findById(user.getId()).isPresent()) {  // if id exist, check for not overwrite
+        if(repository.findById(user.getId()).isPresent()) {                                                                                     // if id exist, check for not overwrite
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        var p = repository.save(user);          // Sparar in användare från request body in i lista i databas
+        var p = repository.save(user);                                                                                                       // Sparar in användare från request body in i lista i databas
         log.info("Saved to repository " + p);
         var entityModel = assembler.toModel(p);
         return new ResponseEntity<>(entityModel, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}") // uppdate  if pressent
+    @PutMapping("/{id}")                                                                                                                    // uppdate  if pressent
     ResponseEntity<EntityModel<UserData>> replacePerson(@RequestBody UserData userIn, @PathVariable Integer id) {
 
         if(repository.findById(id).isPresent()){
@@ -109,35 +109,4 @@ public class UsersController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-/*
-
-    @PatchMapping("/{id}")
-    ResponseEntity<EntityModel<UserData>> modifyPerson(@RequestBody UserData user, @PathVariable Integer id) {
-       if(repository.findById(id).isPresent()) {
-
-           var p = fillUserWithFieldsNotNull(user, repository.findById(id).get());
-           repository.save(p);
-
-           var entityModel = assembler.toModel(p);
-           return new ResponseEntity<>(entityModel, HttpStatus.OK);
-
-       } else {
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-       }
-    }
-
-    private UserData fillUserWithFieldsNotNull(UserData fromRequestBody, UserData fromRepository){
-        Object[] repositoryAllFields = fromRepository.getAllFields();
-        Object[] bodyAllFields = fromRequestBody.getAllFields();
-         for (int i = 0; i < 5; i++){
-            if(bodyAllFields[i] != null){
-                repositoryAllFields[i] = bodyAllFields[i];
-            }
-         }
-        return fromRepository.setAllFieldsFromObjectArray(fromRepository, repositoryAllFields);
-    }
-
-
-
- */
 }

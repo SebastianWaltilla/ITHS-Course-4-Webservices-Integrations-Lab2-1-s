@@ -13,10 +13,10 @@ public class SetupUserDatabase {
     CommandLineRunner initDatabase(UserDataRepository repository) {
         return args -> {
             if( repository.count() == 0) {
-                //New empty database, add some persons
-                repository.save(new UserData(0,"Anton", "Anton Johansson", "Mölndal", 10000, true));
-                repository.save(new UserData(0,"Sebbe", "Sebastian Waltilla", "Fjärås", 60000, true));
-                repository.save(new UserData(0,"Jonte", "Jonathan Holm", "Umeå", 40000, false));
+                //New empty database, add some UserData
+                repository.save(new UserData(0,"Johanna", "Johnna Johansson", "Örgryte", 11000, true));
+                repository.save(new UserData(0,"Sebbe", "Sebastian Waltilla", "Fjärås", 30000, true));
+                repository.save(new UserData(0,"Donnald", "Donnald Duck", "Umeå", 120000, false));
             }
         };
     }

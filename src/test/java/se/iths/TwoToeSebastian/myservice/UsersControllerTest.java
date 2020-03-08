@@ -45,7 +45,7 @@ class UsersControllerTest {
 
     @Test
     @DisplayName("Calls GET method with url /api/v1/usersData/1")
-    void getOnePersonWithValidIdOne() throws Exception {
+    void getOneUserFromRepository() throws Exception {
         mockMvc.perform(
                 get("/api/v1/usersData/1").accept("application/json"))
                 .andExpect(status().isOk())
@@ -53,7 +53,7 @@ class UsersControllerTest {
     }
 
     @Test
-    void getAllReturnsListOfAllPersons() throws Exception {
+    void getAllUsersFromRepository() throws Exception {
         mockMvc.perform(
                 get("/api/v1/usersData").contentType("application/json"))
                 .andExpect(status().isOk())
@@ -63,7 +63,7 @@ class UsersControllerTest {
 
 
     @Test
-    void addNewPersonWithPostReturnsCreatedPerson() throws Exception {
+    void postAddOneUserToRepositoryCheck201() throws Exception {
         mockMvc.perform(
                 post("/api/v1/usersData")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -72,7 +72,7 @@ class UsersControllerTest {
     }
 
     @Test
-    void addPutPersonWithPostReturnsCreatedPerson() throws Exception {
+    void putOoneUserToRepositoryCheck200() throws Exception {
         mockMvc.perform(
                 put("/api/v1/usersData/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -82,10 +82,10 @@ class UsersControllerTest {
 
     @Test
     @DisplayName("Patch with only username and expect other values to remain unchanged")
-    void patchUserWithNewUsername() throws Exception {
+    void patchUserWithNewUsernameInRepositoryCheck200() throws Exception {
         mockMvc.perform(patch("/api/v1/usersData/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"userName\":\"ThisIsNewUserSetInTest\"}")) // vad händer här?
+                .content("{\"userName\":\"ThisIsNewUserSetInTest\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("_links.self.href", is("http://localhost/api/v1/usersData/1")))
                 .andExpect(jsonPath("userName", is("ThisIsNewUserSetInTest")))
@@ -94,7 +94,7 @@ class UsersControllerTest {
 
     @Test
     @DisplayName("Calls DELETE method with url /api/v1/usersData/1")
-    void deleteOnePersonWithValidIdOne() throws Exception {
+    void deleteUserOneFromRepositoryCheck200IfOk() throws Exception {
         mockMvc.perform(
                 delete("/api/v1/usersData/1"))
                 .andExpect(status().isOk());
